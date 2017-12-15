@@ -26,7 +26,8 @@ This sample requires the following:
 
 * This is a private preview API.  Please contact [AADB2CPreview@microsoft.com](mailto:AADB2CPreview@microsoft.com) with the name of your test tenant and 'custom policy APIs' in the title of your email.  This feature is not yet ready for production tenants. 
 * [Visual Studio](https://www.visualstudio.com/en-us/downloads)
-* An [Azure AD B2C tenant](). An Office 365 administrator account is required to run admin-level operations and to consent to application permissions. You can sign up for [an Office 365 Developer subscription](https://msdn.microsoft.com/en-us/office/office365/howto/setup-development-environment#bk_Office365Account) that includes the resources that you need to start building apps.
+* An [Azure AD B2C tenant](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started).
+* An global administrator account is required to run admin-level operations and to consent to application permissions.  (for example: admin@myb2ctenant.onmicrosoft.com)
 
 ## Register the delegated permissions application
 
