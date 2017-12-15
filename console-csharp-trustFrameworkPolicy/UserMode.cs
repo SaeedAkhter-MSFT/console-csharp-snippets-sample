@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Graph;
@@ -12,7 +9,9 @@ namespace console_csharp_trustframeworkpolicy
     internal class UserMode
     {
         public static GraphServiceClient client;
-        public static void UserModeRequests()
+
+
+        public static bool CreateGraphClient()
         {
             try
             {
@@ -22,6 +21,7 @@ namespace console_csharp_trustframeworkpolicy
                 if (Constants.ClientIdForUserAuthn != "ENTER_YOUR_CLIENT_ID")
                 {
                     client = AuthenticationHelper.GetAuthenticatedClientForUser();
+                    return true;
                 }
                 else
                 {
@@ -29,7 +29,7 @@ namespace console_csharp_trustframeworkpolicy
                     Console.WriteLine("You haven't configured a value for ClientIdForUserAuthn in Constants.cs. Please follow the Readme instructions for configuring this application.");
                     Console.ResetColor();
                     Console.ReadKey();
-                    return;
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -44,40 +44,60 @@ namespace console_csharp_trustframeworkpolicy
                 }
                 Console.ResetColor();
                 Console.ReadKey();
-                return;
-            }
-
-            Console.WriteLine("\nPlease login as a global admin of the tenant (example: admin@myb2c.onmicrosoft.com");
-            Console.WriteLine("\n=============================\n\n");
-
-            try
-            {
-                User user = client.Me.Request().GetAsync().Result;
-                Console.WriteLine("Current user:    Id: {0}  UPN: {1}", user.Id, user.UserPrincipalName);
-
-                HttpClient httpClient = new HttpClient();
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/testcpimtf/trustFrameworkPolicies");
-                AuthenticationHelper.AddHeaders(request);
-
-                Console.WriteLine(request.RequestUri);
-                Console.WriteLine(request.Headers);
-
-                Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-                httpRequest.Wait();
-
-                Console.WriteLine("RESPONSE");
-                Console.WriteLine(httpRequest.Result.Headers);
-                Task<string> taskContentString = httpRequest.Result.Content.ReadAsStringAsync();
-                taskContentString.Wait();
-                Console.WriteLine(taskContentString.Result);
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine("\nError getting /me user {0} {1}",
-                     e.Message, e.InnerException != null ? e.InnerException.Message : "");
+                return false;
             }
         }
 
+        public static HttpRequestMessage HttpGet(string uri)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
+            AuthenticationHelper.AddHeaders(request);
+            return request;
+        }
+
+        public static HttpRequestMessage HttpGetID(string uri, string id)
+        {
+            string uriWithID = String.Format(uri, id);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uriWithID);
+            AuthenticationHelper.AddHeaders(request);
+            return request;
+        }
+
+        public static HttpRequestMessage HttpPutID(string uri, string id, string xml)
+        {
+            string uriWithID = String.Format(uri, id);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, uriWithID);
+            AuthenticationHelper.AddHeaders(request);
+            request.Content = new StringContent(xml, Encoding.UTF8, "application/xml");
+            return request;
+        }
+
+        public static HttpRequestMessage HttpPost(string uri, string xml)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, uri);
+            AuthenticationHelper.AddHeaders(request);
+            request.Content = new StringContent(xml, Encoding.UTF8, "application/xml");
+            return request;
+        }
+
+        public static HttpRequestMessage HttpDeleteID(string uri, string id)
+        {
+            string uriWithID = String.Format(uri, id);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, uriWithID);
+            AuthenticationHelper.AddHeaders(request);
+            return request;
+        }
+
+        public static void LoginAsAdmin()
+        {
+            Console.WriteLine("Login as a global admin of the tenant (example: admin@myb2c.onmicrosoft.com");
+            Console.WriteLine("=============================");
+
+            if (CreateGraphClient())
+            {
+                User user = client.Me.Request().GetAsync().Result;
+                Console.WriteLine("Current user:    Id: {0}  UPN: {1}", user.Id, user.UserPrincipalName);
+            }
+        }
     }
 }

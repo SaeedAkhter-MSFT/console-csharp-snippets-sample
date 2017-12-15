@@ -11,32 +11,17 @@ namespace console_csharp_trustframeworkpolicy
 {
     class AuthenticationHelper
     {
-        // The Client ID is used by the application to uniquely identify itself to the v2.0 authentication endpoint.
-        static string clientIdForUser = Constants.ClientIdForUserAuthn;
-        // The Group.Read.All permission is an admin-only scope, so authorization will fail if you 
-        // want to sign in with a non-admin account. Remove that permission and comment out the group operations in 
-        // the UserMode() method if you want to run this sample with a non-admin account.
-        public static string[] Scopes = { "User.Read",
-                                           "User.ReadWrite",
-                                           "User.ReadBasic.All",
-                                           "Calendars.ReadWrite",
-                                           "Contacts.Read",
-                                           "Mail.Send",
-                                           "Mail.ReadWrite",
-                                           "Files.ReadWrite",
-                                            // Group.Read.All is an admin-only scope. It allows you to read Group details.
-                                            // Uncomment this scope if you want to run the application with an admin account
-                                            // and perform the group operations in the UserMode class.
-                                            // You'll also need to uncomment the UserMode.UserModeRequests.GetDetailsForGroups() method.
-                                            //"Group.Read.All" 
-                                        };
+        // The test endpoint currently does not require a specific scope.
+        // By public preview, this API will require Policy.ReadWrite.All permission as an admin-only scope,
+        // so authorization will fail if you sign in with a non-admin account.
+        // For now, this API is only accessible on tenants that have been whitelisted
+        public static string[] Scopes = { "User.Read" };
 
-        public static PublicClientApplication IdentityClientApp = new PublicClientApplication(clientIdForUser);
+        public static PublicClientApplication IdentityClientApp = new PublicClientApplication(Constants.ClientIdForUserAuthn);
         public static string TokenForUser = null;
         public static DateTimeOffset Expiration;
 
         private static GraphServiceClient graphClient = null;
-
 
         // Get an access token for the given context and resourceId. An attempt is first made to 
         // acquire the token silently. If that fails, then we try to acquire the token by prompting the user.
@@ -84,7 +69,6 @@ namespace console_csharp_trustframeworkpolicy
             }
         }
 
-
         /// <summary>
         /// Get Token for User.
         /// </summary>
@@ -123,7 +107,6 @@ namespace console_csharp_trustframeworkpolicy
             }
             graphClient = null;
             TokenForUser = null;
-
         }
 
     }

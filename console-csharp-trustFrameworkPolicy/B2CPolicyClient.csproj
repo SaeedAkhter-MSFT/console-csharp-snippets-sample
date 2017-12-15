@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6A3A724C-5985-494F-9FFE-2C1DD10E789F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>console_csharp_snippets_sample</RootNamespace>
-    <AssemblyName>console-csharp-snippets-sample</AssemblyName>
+    <RootNamespace>console_csharp_trustframeworkpolicy</RootNamespace>
+    <AssemblyName>B2CPolicyClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
