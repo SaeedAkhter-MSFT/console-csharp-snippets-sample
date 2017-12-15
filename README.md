@@ -1,4 +1,4 @@
-# Microsoft Graph C# Console Snippets App
+# Azure AD B2C console tool for custom trust framework policy
 
 ## Table of contents
 
